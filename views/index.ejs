@@ -1,0 +1,172 @@
+<%- include("header"); -%>
+
+<div class="row">
+  <div class="col-md-2">
+    <div class="container how-to">
+      <h5>How to?</h5>
+      <br />
+      <p class="description">
+        This tool allows you to obtain predictions from and visualise
+        <a href="https://arxiv.org/abs/1809.00888">MesoNet</a>, a deepfake
+        detector Enter the number of images, select a particular MesoNet variant
+        to use, check any convolutional layers you want to visualise and hit
+        submit! Voila! The tool will randomly select images from a dataset, make
+        predictions, draw some plots and will show you the results!
+      </p>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="heading">
+      <h1>MesoNet</h1>
+      <!-- <p class="sub-heading">A Deepfake Detector</p> -->
+    </div>
+    <div class="top-layer">
+      <div class="container form-container">
+        <form action="" method="POST">
+          <div class="img-form form-group input-group">
+            <input
+              type="number"
+              class="form-control"
+              id="images"
+              name="images"
+              placeholder="Number of images"
+              required
+            />
+            <button type="submit" class="btn btn-md btn-light mt-5">Predict</button>
+          </div>
+          <% if(size) { %>
+            <small class="text-muted"
+              >Limit exceeded. Please give a value within range <%= size
+              %></small
+            >
+            <% } %>
+          <div id="radios" class="form-radios">
+            <small>MesoNet Variant</small>
+            <hr />
+            <% for(var i = 0; i < modelLength; ++i) { %>
+            <div class="form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="models"
+                id="<%= 'model' + (i+1) %>"
+                value="<%= id[i] %>"
+                required
+              />
+              <label class="form-check-label" for="<%= 'model' + (i+1) %>">
+                Model <%= i+1 %>
+              </label>
+            </div>
+            <% } %>
+          </div>
+          <br />
+          <div id="checkboxes" class="form-check"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <button type="submit" style="display: none"></button>
+  <div class="col-md-2 sidenav">
+    <% for(var i = 0; i < modelLength; ++i) { %>
+    <div id="sidebar" class="sidebar <%= 'model' + (i+1) %>">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+        >&times;</a
+      >
+      <h2 class="side-model <%= 'model-name' + (i+1) %>"></h2>
+      <br>
+      <p class="side-model-desc <%= 'model-desc' + (i+1) %>">Description:</p>
+      <br>
+      <p class="loss-label">Loss Curve:</p>
+      <img class="side-model-img <%= 'model-img' + (i+1) %>" src="" alt="loss curve">
+      <br>
+      <br>
+      <p class="acc-head">Accuracy:</p>
+      <h2 class="side-acc <%= 'accuracy' + (i+1) %>"></h2>
+      <br>
+      <p class="clr-label <%= 'model-clr' + (i+1) %>">ROC Report:</p>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  var layers = JSON.parse("<%- JSON.stringify(layers) %>");
+  var layersLength = JSON.parse("<%- JSON.stringify(layersLength) %>");
+  var accuracy = JSON.parse("<%- JSON.stringify(accuracy) %>");
+  var model = JSON.parse('<%- JSON.stringify(model) %>');
+  var id = JSON.parse('<%- JSON.stringify(id) %>');
+  var lossCurve = JSON.parse('<%- JSON.stringify(lossCurve) %>');
+  var desc = JSON.parse('<%- JSON.stringify(desc); %>');
+  var clr = '<%- JSON.stringify(clr); %>';
+
+
+  $(document).ready(function () {
+    $('input[type="radio"]').one("click", function () {
+      var id = this.id;
+      var index = id.slice(5);
+
+      for (var i = 0; i < layersLength[index - 1]; ++i) {
+        $("#checkboxes")
+          .append(
+            $(document.createElement("input")).prop({
+              id: "myCheckBox",
+              name: "layers",
+              value: i,
+              type: "checkbox",
+              class: "form-check-input checkbox model" + index,
+            })
+          )
+          .append(
+            $(document.createElement("label"))
+              .prop({
+                for: "myCheckBox",
+                class: "form-check-label checkbox model" + index,
+              })
+              .html(
+                '<p class="options">Convolutional Layer ' +
+                  (i + 1) +
+                  " (" +
+                  layers[index - 1][i][0] +
+                  " filters of size " +
+                  layers[index - 1][i][1][0] +
+                  " x " +
+                  layers[index - 1][i][1][1] +
+                  ")<p/>"
+              )
+          )
+          .append($(document.createElement("br")));
+      }
+    });
+  });
+
+  $(document).ready(function () {
+    $('input[type="radio"]').one("click", function () {
+      var id = this.id;
+      var index = id.slice(5);
+      $('div .sidenav').find('.model' + index).prop('id', 'sidebar' + index);
+      $(".model-name" + index).append("<span>" + model[index-1] + "</span>");
+      $('.model-desc'+index).append('<p>' + desc[index-1] + '</p>');
+      $('.model-img'+index).prop('src', lossCurve[index-1]);
+      $('.model-clr' + index).append('<p>' + clr + '</p>');
+      $(".accuracy" + index).append(accuracy[index - 1] + '%');
+    });
+  });
+
+  $(document).ready(function () {
+    $('input[type="radio"]').change(function () {
+      var id = this.id;
+      var index = id.slice(5);
+      $(".checkbox").not(id).hide();
+      $('.sidebar').not(id).hide();
+      $("." + id).show();
+      $('#sidebar' + index).css('width', '25rem');
+    });
+  });
+
+  function closeNav(){
+    $('.sidebar').css('width', '0');
+  }
+
+</script>
+
+<%- include("footer"); -%>

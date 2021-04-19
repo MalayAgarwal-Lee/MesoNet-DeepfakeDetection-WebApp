@@ -1,0 +1,25 @@
+<%- include("header"); -%>
+
+    <% for(var i = 0; i < layersLen; i++) { %>
+
+              <div class="container pred-container">
+                <h3><%= prob[i] %></h3> <br>
+                <h4>Actual: <%= real[i] %> | Predicted: <%= pred[i] %></h4>
+                <br>
+                <img class="predicted-img" src="<%= baseUrl %><%= url[i] %>" alt="">
+                <div class="container">
+                    <div class="row">
+                        <% plots[i].forEach(function(plot){ %>
+                            <div class="col-md-6">
+                                <img src="<%= baseUrl %><%= plot %>" alt="">
+                            </div>
+                        <% }) %>
+                        
+                    </div>
+                </div>
+                </div>
+          
+          <% } %>
+
+
+<%- include("footer"); -%>

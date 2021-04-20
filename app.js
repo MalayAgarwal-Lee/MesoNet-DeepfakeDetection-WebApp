@@ -29,17 +29,17 @@ app.get("/", function (req, res) {
         accuracy = [],
         clr = [],
         lossCurve = [];
+      const clrCols = models[0].clr.columns;
         
 
       models.forEach(function (model) {
-        const conv_layer = JSON.parse(model.conv_layers);
-        layers.push(conv_layer);
-        layersLength.push(conv_layer.length);
+        layers.push(model.conv_layers);
+        layersLength.push(model.conv_layers.length);
         modelName.push(model.model_name);
         id.push(model.model_id);
         desc.push(model.model_desc);
         accuracy.push(model.accuracy);
-        clr.push(model.clr);
+        clr.push(model.clr.rows);
         lossCurve.push(model.loss_curve);
       });
 
@@ -53,6 +53,7 @@ app.get("/", function (req, res) {
         desc: desc,
         accuracy: accuracy,
         clr: clr,
+        clrCols: clrCols,
         lossCurve: lossCurve,
       });
     });
@@ -80,6 +81,7 @@ app.post("/", function (req, res) {
 });
 
 app.get("/predictions/:images/:modelId/:layers", function (req, res) {
+  // req.socket.setTimeout(1000*60*10);
   images = req.params.images;
   modelId = req.params.modelId;
   layers = req.params.layers;
@@ -89,31 +91,29 @@ app.get("/predictions/:images/:modelId/:layers", function (req, res) {
     baseUrl + "/api/predictions/" + modelId + "/" + images + "/" + layers + "/";
 
   http.get(url, function (response) {
-    response.on("data", function (data) {
+    response.on("data", function(data) {
       const predictions = JSON.parse(data);
-      const imgs = Object.entries(predictions);
-
       const probability = [],
         imgUrl = [],
         real = [],
-        pred = [],
+        predict = [],
         plots = [];
 
-      for (var i = 0; i < images; ++i) {
-        let imgObj = imgs[i][1];
-        probability.push(imgObj.probability);
-        imgUrl.push(imgObj.img_url);
-        real.push(imgObj.true_label);
-        pred.push(imgObj.pred_label);
-        plots.push(imgObj.plots);
-      }
+        predictions.forEach(function(pred){
+          probability.push(pred.probability);
+          real.push(pred.true_label);
+          predict.push(pred.pred_label);
+          imgUrl.push(pred.img_url);
+          plots.push(pred.plots);
+        })
 
       res.render("results", {
+        images: images,
         prob: probability,
         baseUrl: baseUrl,
         url: imgUrl,
         real: real,
-        pred: pred,
+        pred: predict,
         plots: plots,
         layersLen: layersLen,
       });

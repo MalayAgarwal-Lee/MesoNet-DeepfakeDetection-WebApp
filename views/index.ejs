@@ -42,7 +42,7 @@
             <% } %>
           <div id="radios" class="form-radios">
             <small>MesoNet Variant</small>
-            <hr />
+            <hr class="hr" />
             <% for(var i = 0; i < modelLength; ++i) { %>
             <div class="form-check-inline">
               <input
@@ -84,6 +84,20 @@
       <h2 class="side-acc <%= 'accuracy' + (i+1) %>"></h2>
       <br>
       <p class="clr-label <%= 'model-clr' + (i+1) %>">ROC Report:</p>
+      <div class="table-div">
+        <table class="table table-dark side-table">
+          <thead>
+            <tr>
+              <% clrCols.forEach(function(col) { %> 
+              <th scope="col"><%= col %></th>
+              <% }) %>
+            </tr>
+          </thead>
+          <tbody id="<%= 'tbody' + (i+1) %>">
+          </tbody>
+        </table>
+      </div>
+      
     </div>
     <% } %>
   </div>
@@ -97,7 +111,8 @@
   var id = JSON.parse('<%- JSON.stringify(id) %>');
   var lossCurve = JSON.parse('<%- JSON.stringify(lossCurve) %>');
   var desc = JSON.parse('<%- JSON.stringify(desc); %>');
-  var clr = '<%- JSON.stringify(clr); %>';
+  var clr = JSON.parse('<%- JSON.stringify(clr); %>');
+  var clrCols = JSON.parse('<%- JSON.stringify(clrCols); %>');
 
 
   $(document).ready(function () {
@@ -145,9 +160,29 @@
       var index = id.slice(5);
       $('div .sidenav').find('.model' + index).prop('id', 'sidebar' + index);
       $(".model-name" + index).append("<span>" + model[index-1] + "</span>");
-      $('.model-desc'+index).append('<p>' + desc[index-1] + '</p>');
+      $('.model-desc'+index).append('<p class="desc-text">' + desc[index-1] + '</p>');
       $('.model-img'+index).prop('src', lossCurve[index-1]);
-      $('.model-clr' + index).append('<p>' + clr + '</p>');
+        
+        row = (clr[index-1]);
+        for(var i = 0 ; i < row.length; ++i){
+          $('<tr />', {'id': i, scope: 'row', 'text': row[i][0]})
+        .appendTo("#tbody" +index);
+          for(var r = 1; r < row[i].length; ++r){
+            $('<td />', {
+        'text': row[i][r],
+    }).appendTo('#' + i);
+
+          }
+        }
+
+        // row.forEach(function(r){
+        //   $('#tbody' + index).append('<tr id='+ r[0] + '>'+ r[0] +'</tr>');
+        //   console.log(r);
+        //   r.forEach(function(x){
+        //     $('#tbody' + index + ' tr').append('<td>'+ x +'</td>');
+        //   });
+        //   });
+
       $(".accuracy" + index).append(accuracy[index - 1] + '%');
     });
   });
@@ -159,7 +194,7 @@
       $(".checkbox").not(id).hide();
       $('.sidebar').not(id).hide();
       $("." + id).show();
-      $('#sidebar' + index).css('width', '25rem');
+      $('#sidebar' + index).css('width', '27rem');
     });
   });
 

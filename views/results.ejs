@@ -1,25 +1,64 @@
 <%- include("header"); -%>
+<div class="container pred-head">
+    <h5>Showing <%= images %> images</h5>
+</div>
+<div class="card-container">
+  <div class="row">
+    <% for(var i = 0; i < images; ++i){ %>
+    <div class="col-md-6">
+      <div class="container">
+        <div class="card mt-5" style="width: auto">
+          <div class="row">
+            <div class="col-sm-4">
+              <img
+                src="<%= baseUrl %><%= url[i] %>"
+                alt=""
+                class="predicted-img"
+              />
+            </div>
+            <div class="col-sm-8">
+              <div class="row">
+                <div class="col-md-7">
 
-    <% for(var i = 0; i < layersLen; i++) { %>
-
-              <div class="container pred-container">
-                <h3><%= prob[i] %></h3> <br>
-                <h4>Actual: <%= real[i] %> | Predicted: <%= pred[i] %></h4>
-                <br>
-                <img class="predicted-img" src="<%= baseUrl %><%= url[i] %>" alt="">
-                <div class="container">
-                    <div class="row">
-                        <% plots[i].forEach(function(plot){ %>
-                            <div class="col-md-6">
-                                <img src="<%= baseUrl %><%= plot %>" alt="">
-                            </div>
-                        <% }) %>
-                        
-                    </div>
+                  <small>Actual</small><br />
+                  <h3 class="capitalize"><%= real[i] %></h3>
+                
+                  <hr />
+                  <small>Prediction</small>
+                  <h3 class="capitalize"><%= pred[i] %></h3>
+              
                 </div>
+                <div class="col-md-5">
+                  <div class="prob-container">
+                    <small>Probability</small>
+                    <h2 class="prob"><%= prob[i] %></h2>
+                    <br />
+                    <br />
+                    <button
+                      class="btn btn-md btn-light"
+                      data-toggle="collapse"
+                      href="#multiCollapseExample1"
+                      role="button"
+                      aria-expanded="false"
+                      aria-controls="multiCollapseExample1"
+                    >
+                      Show Plots
+                    </button>
+                  </div>
                 </div>
-          
-          <% } %>
-
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="collapse multi-collapse" id="multiCollapseExample1">
+            <div class="card card-body">
+              <img src="<%= baseUrl %><%= plots[i][0] %>" alt="">
+            </div>
+          </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>
 
 <%- include("footer"); -%>

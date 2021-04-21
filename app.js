@@ -8,6 +8,8 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
+const baseUrl = 'http://127.0.0.1:8000/api/';
+
 app.get("/", function (req, res) {
   const qSize = req.query.size;
   if (qSize) {
@@ -16,23 +18,23 @@ app.get("/", function (req, res) {
     size = 0;
   }
 
-  url = "http://127.0.0.1:8000/api/available-models/";
+  url = baseUrl + "available-models/";
 
   http.get(url, function (response) {
     response.on("data", function (data) {
       const models = JSON.parse(data);
       const modelLength = models.length;
       const modelName = [],
-        id = [], desc = [],
+        id = [],
+        desc = [],
         layers = [],
         layersLength = [],
         accuracy = [],
         clr = [],
         lossCurve = [];
       const clrCols = models[0].clr.columns;
-        
 
-      models.forEach(function (model) {
+      models.forEach( (model) => {
         layers.push(model.conv_layers);
         layersLength.push(model.conv_layers.length);
         modelName.push(model.model_name);
@@ -64,15 +66,15 @@ app.post("/", function (req, res) {
   images = req.body.images;
   modelId = req.body.models;
   let layers = req.body.layers;
-  if( typeof layers === 'undefined'){
-    layers = '';
-  } else if (layers.length > 1){
-    layers = layers.join('');
+  if (typeof layers === "undefined") {
+    layers = "";
+  } else if (layers.length > 1) {
+    layers = layers.join("");
   }
 
-  url = "http://127.0.0.1:8000/api/dataset-size/";
+  url = baseUrl + "dataset-size/";
 
-  http.get(url, function (response) {
+  http.get(url, (response) => {
     response.on("data", function (data) {
       const dataset = JSON.parse(data);
       const size = dataset.size;
@@ -91,17 +93,16 @@ app.get("/predictions/:images/:modelId/:layers?", function (req, res) {
   modelId = req.params.modelId;
   layers = req.params.layers;
   let layersLen = 0;
+
+  let url = baseUrl + "/predictions/" + modelId + "/" + images + "/";
   
-  baseUrl = "http://127.0.0.1:8000";
-  let url =
-    baseUrl + "/api/predictions/" + modelId + "/" + images + "/"
   if (layers) {
-   url = url + layers + "/";
-   layersLen = layers.length;
+    url = url + layers + "/";
+    layersLen = layers.length;
   }
 
-  http.get(url, function (response) {
-    response.on("data", function(data) {
+  http.get(url, (response) => {
+    response.on("data", function (data) {
       const predictions = JSON.parse(data);
       const probability = [],
         imgUrl = [],
@@ -109,13 +110,13 @@ app.get("/predictions/:images/:modelId/:layers?", function (req, res) {
         predict = [],
         plots = [];
 
-        predictions.forEach(function(pred){
-          probability.push(pred.probability);
-          real.push(pred.true_label);
-          predict.push(pred.pred_label);
-          imgUrl.push(pred.img_url);
-          plots.push(pred.plots);
-        })
+      predictions.forEach((pred) => {
+        probability.push(pred.probability);
+        real.push(pred.true_label);
+        predict.push(pred.pred_label);
+        imgUrl.push(pred.img_url);
+        plots.push(pred.plots);
+      });
 
       res.render("results", {
         images: images,
@@ -131,6 +132,6 @@ app.get("/predictions/:images/:modelId/:layers?", function (req, res) {
   });
 });
 
-app.listen(3000, function () {
+app.listen(process.env.PORT || 3000, function () {
   console.log("listening on port 3000...");
 });

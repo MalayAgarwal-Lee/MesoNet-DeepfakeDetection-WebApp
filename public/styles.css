@@ -1,19 +1,19 @@
 @import url(https://fonts.googleapis.com/css?family=Skranji&display=swap);
 @import url("https://fonts.googleapis.com/css2?family=Monofett&display=swap");
 
-html,
-body {
-  height: 100%;
-  font-weight: 800;
+html{
+  height: 100vh;
 }
 
 body {
+  height: -webkit-fill-available;
   font-family: monospace;
   color: #ffffff;
   overflow-x: hidden;
 }
 
 .background {
+  /* height: 100%; */
   background-repeat: repeat-y;
   background-position: center;
   background-size: cover;
@@ -147,11 +147,6 @@ input[type="number"]:focus {
   color: burlywood;
 }
 
-hr .hr {
-  border-color: #c7b1d6;
-  width: 15rem;
-}
-
 hr {
   border-color: #c7b1d6;
 }
@@ -234,12 +229,11 @@ hr {
   overflow-x: auto;
 }
 
-footer {
+div .footer {
   position: absolute;
   bottom: 0;
-  left: 50%;
+  margin: auto;
   text-align: center;
-  margin-bottom: 20px;
   word-spacing: 10px;
 }
 
@@ -276,6 +270,10 @@ footer {
   border-right: 1px solid grey;
 }
 
+.head-hr {
+  width: 70%;
+}
+
 .capitalize {
   text-transform: capitalize;
   font-size: 1.4rem;
@@ -296,12 +294,25 @@ footer {
 
 .card-container {
   width: 90%;
-  padding: 5%;
-  padding-top: 2%;
+  padding: 7%;
+  padding-top: 0;
   margin: 0 auto;
 }
 
 .pred-head {
   color: rgb(144, 144, 144);
   text-align: center;
+  padding-top: 4rem;
 }
+
+.carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+ }
+ 
+ .carousel-control-next-icon {
+   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+ }
+
+ .carousel-indicators li {
+   background-color: #000;
+ }

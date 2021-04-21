@@ -1,6 +1,17 @@
 <%- include("header"); -%>
 <div class="container pred-head">
-  <h5>Showing <%= images %> images</h5>
+  <div class="row">
+    <div class="col-sm-6">
+      <h5 class="mb-0 mt-3">Showing <%= images %> images</h5>
+    </div>
+    <div class="col-sm-6">
+      <a href="/" style="float: right"
+        ><button class="btn btn-lg btn-light" role="button">
+          Predict More
+        </button></a
+      >
+    </div>
+  </div>
 </div>
 <hr class="head-hr" />
 <div class="card-container">
@@ -33,6 +44,7 @@
                     <h2 class="prob"><%= prob[i] %></h2>
                     <br />
                     <br />
+                    <% if(plots.length === 0) { %>
                     <button
                       class="btn btn-md btn-light"
                       data-toggle="collapse"
@@ -43,6 +55,7 @@
                     >
                       Show Plots
                     </button>
+                    <% } %>
                   </div>
                 </div>
               </div>

@@ -3,7 +3,7 @@
 <div class="row">
   <div class="col-md-2">
     <div class="container how-to">
-      <h5>How to?</h5>
+      <h5>How-to</h5>
       <br />
       <p class="description">
         This tool allows you to obtain predictions from and visualise
@@ -32,17 +32,18 @@
               placeholder="Number of images"
               required
             />
-            <button type="submit" class="btn btn-md btn-light mt-5">Predict</button>
+            <button type="submit" class="btn btn-md btn-light mt-5">
+              Predict
+            </button>
           </div>
           <% if(size) { %>
-            <small class="text-muted"
-              >Limit exceeded. Please give a value within range <%= size
-              %></small
-            >
-            <% } %>
+          <small class="text-muted"
+            >Limit exceeded. Please give a value within range <%= size %></small
+          >
+          <% } %>
           <div id="radios" class="form-radios">
             <small>MesoNet Variant</small>
-            <hr style="width: 15rem;">
+            <hr style="width: 15rem" />
             <% for(var i = 0; i < modelLength; ++i) { %>
             <div class="form-check-inline">
               <input
@@ -60,7 +61,7 @@
             <% } %>
           </div>
           <br />
-          <div id="checkboxes" class="form-check"></div>
+          <div id="checkboxes" class="form-check checkboxes"></div>
         </form>
       </div>
     </div>
@@ -73,135 +74,48 @@
         >&times;</a
       >
       <h2 class="side-model <%= 'model-name' + (i+1) %>"></h2>
-      <br>
+      <br />
       <p class="side-model-desc <%= 'model-desc' + (i+1) %>">Description:</p>
-      <br>
+      <br />
       <p class="loss-label">Loss Curve:</p>
-      <img class="side-model-img <%= 'model-img' + (i+1) %>" src="" alt="loss curve">
-      <br>
-      <br>
+      <img
+        class="side-model-img <%= 'model-img' + (i+1) %>"
+        src=""
+        alt="loss curve"
+      />
+      <br />
+      <br />
       <p class="acc-head">Accuracy:</p>
       <h2 class="side-acc <%= 'accuracy' + (i+1) %>"></h2>
-      <br>
+      <br />
       <p class="clr-label <%= 'model-clr' + (i+1) %>">ROC Report:</p>
       <div class="table-div">
         <table class="table table-dark side-table">
           <thead>
             <tr>
-              <% clrCols.forEach(function(col) { %> 
+              <% clrCols.forEach(function(col) { %>
               <th scope="col"><%= col %></th>
               <% }) %>
             </tr>
           </thead>
-          <tbody id="<%= 'tbody' + (i+1) %>">
-          </tbody>
+          <tbody id="<%= 'tbody' + (i+1) %>"></tbody>
         </table>
       </div>
-      
     </div>
     <% } %>
   </div>
 </div>
 
-<script>
-  var layers = JSON.parse("<%- JSON.stringify(layers) %>");
-  var layersLength = JSON.parse("<%- JSON.stringify(layersLength) %>");
-  var accuracy = JSON.parse("<%- JSON.stringify(accuracy) %>");
-  var model = JSON.parse('<%- JSON.stringify(model) %>');
-  var id = JSON.parse('<%- JSON.stringify(id) %>');
-  var lossCurve = JSON.parse('<%- JSON.stringify(lossCurve) %>');
-  var desc = JSON.parse('<%- JSON.stringify(desc); %>');
-  var clr = JSON.parse('<%- JSON.stringify(clr); %>');
-  var clrCols = JSON.parse('<%- JSON.stringify(clrCols); %>');
+<span id="layersData" hidden><%= JSON.stringify(layers) %></span>
+<span id="layersLengthData" hidden> <%= JSON.stringify(layersLength) %> </span>
+<span id="modelData" hidden> <%= JSON.stringify(model) %> </span>
+<span id="accuracyData" hidden> <%= JSON.stringify(accuracy) %> </span>
+<span id="idData" hidden> <%= JSON.stringify(id) %> </span>
+<span id="lossData" hidden> <%= JSON.stringify(lossCurve) %> </span>
+<span id="descData" hidden> <%= JSON.stringify(desc) %> </span>
+<span id="clrData" hidden> <%= JSON.stringify(clr) %> </span>
+<span id="clrColsData" hidden> <%= JSON.stringify(clrCols) %> </span>
 
-
-  $(document).ready(function () {
-    $('input[type="radio"]').one("click", function () {
-      var id = this.id;
-      var index = id.slice(5);
-
-      for (var i = 0; i < layersLength[index - 1]; ++i) {
-        $("#checkboxes")
-          .append(
-            $(document.createElement("input")).prop({
-              id: "myCheckBox",
-              name: "layers",
-              value: i,
-              type: "checkbox",
-              class: "form-check-input checkbox model" + index,
-            })
-          )
-          .append(
-            $(document.createElement("label"))
-              .prop({
-                for: "myCheckBox",
-                class: "form-check-label checkbox model" + index,
-              })
-              .html(
-                '<p class="options">Convolutional Layer ' +
-                  (i + 1) +
-                  " (" +
-                  layers[index - 1][i][0] +
-                  " filters of size " +
-                  layers[index - 1][i][1][0] +
-                  " x " +
-                  layers[index - 1][i][1][1] +
-                  ")<p/>"
-              )
-          )
-          .append($(document.createElement("br")));
-      }
-    });
-  });
-
-  $(document).ready(function () {
-    $('input[type="radio"]').one("click", function () {
-      var id = this.id;
-      var index = id.slice(5);
-      $('div .sidenav').find('.model' + index).prop('id', 'sidebar' + index);
-      $(".model-name" + index).append("<span>" + model[index-1] + "</span>");
-      $('.model-desc'+index).append('<p class="desc-text">' + desc[index-1] + '</p>');
-      $('.model-img'+index).prop('src', lossCurve[index-1]);
-        
-        row = (clr[index-1]);
-        for(var i = 0 ; i < row.length; ++i){
-          $('<tr />', {'id': i, scope: 'row', 'text': row[i][0]})
-        .appendTo("#tbody" +index);
-          for(var r = 1; r < row[i].length; ++r){
-            $('<td />', {
-        'text': row[i][r],
-    }).appendTo('#' + i);
-
-          }
-        }
-
-        // row.forEach(function(r){
-        //   $('#tbody' + index).append('<tr id='+ r[0] + '>'+ r[0] +'</tr>');
-        //   console.log(r);
-        //   r.forEach(function(x){
-        //     $('#tbody' + index + ' tr').append('<td>'+ x +'</td>');
-        //   });
-        //   });
-
-      $(".accuracy" + index).append(accuracy[index - 1] + '%');
-    });
-  });
-
-  $(document).ready(function () {
-    $('input[type="radio"]').change(function () {
-      var id = this.id;
-      var index = id.slice(5);
-      $(".checkbox").not(id).hide();
-      $('.sidebar').not(id).hide();
-      $("." + id).show();
-      $('#sidebar' + index).css('width', '27rem');
-    });
-  });
-
-  function closeNav(){
-    $('.sidebar').css('width', '0');
-  }
-
-</script>
+<script src="/index.js"></script>
 
 <%- include("footer"); -%>

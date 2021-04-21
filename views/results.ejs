@@ -1,8 +1,8 @@
 <%- include("header"); -%>
 <div class="container pred-head">
-    <h5>Showing <%= images %> images</h5>
+  <h5>Showing <%= images %> images</h5>
 </div>
-<hr class="head-hr">
+<hr class="head-hr" />
 <div class="card-container">
   <div class="row">
     <% for(var i = 0; i < images; ++i){ %>
@@ -20,14 +20,12 @@
             <div class="col-sm-8">
               <div class="row">
                 <div class="col-md-7">
-
                   <small>Actual</small><br />
                   <h3 class="capitalize"><%= real[i] %></h3>
-                
+
                   <hr />
                   <small>Prediction</small>
                   <h3 class="capitalize"><%= pred[i] %></h3>
-              
                 </div>
                 <div class="col-md-5">
                   <div class="prob-container">
@@ -35,7 +33,7 @@
                     <h2 class="prob"><%= prob[i] %></h2>
                     <br />
                     <br />
-                    <button 
+                    <button
                       class="btn btn-md btn-light"
                       data-toggle="collapse"
                       href="#<%= 'plot' + i %>"
@@ -52,33 +50,58 @@
           </div>
           <div class="collapse multi-collapse" id="<%= 'plot' + i %>">
             <div class="card card-body">
-                <div id="<%= 'carouselPlotIndicators' + i %>" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <% for(var j = 0; j < plots[i].length; ++j){ %>
-                      <li data-target="<%= 'carouselPlotIndicators' + i %>" data-slide-to="<%= j %>"></li>
-                      <% } %>
-                    </ol>
-                    <div class="carousel-inner">
-                        <% for(var j = 0; j < plots[i].length; ++j ) { %>
-                      <div class="carousel-item" data-interval="10000">
-                        <img src="<%= baseUrl %><%= plots[i][j] %>" class="d-block w-100" alt="plot">
-                      </div>
-                      <% } %>
-                    </div>
-                    <a class="carousel-control-prev" href="#<%= 'carouselPlotIndicators' + i %>" role="button" data-slide="prev">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#<%= 'carouselPlotIndicators' + i %>" role="button" data-slide="next">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Next</span>
-                    </a>
+              <div
+                id="<%= 'carouselPlotIndicators' + i %>"
+                class="carousel slide"
+                data-ride="carousel"
+              >
+                <ol class="carousel-indicators">
+                  <% for(var j = 0; j < plots[i].length; ++j){ %>
+                  <li
+                    data-target="<%= 'carouselPlotIndicators' + i %>"
+                    data-slide-to="<%= j %>"
+                  ></li>
+                  <% } %>
+                </ol>
+                <div class="carousel-inner">
+                  <% for(var j = 0; j < plots[i].length; ++j ) { %>
+                  <div class="carousel-item" data-interval="10000">
+                    <img
+                      src="<%= baseUrl %><%= plots[i][j] %>"
+                      class="d-block w-100"
+                      alt="plot"
+                    />
                   </div>
-              
+                  <% } %>
+                </div>
+                <a
+                  class="carousel-control-prev"
+                  href="#<%= 'carouselPlotIndicators' + i %>"
+                  role="button"
+                  data-slide="prev"
+                >
+                  <span
+                    class="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a
+                  class="carousel-control-next"
+                  href="#<%= 'carouselPlotIndicators' + i %>"
+                  role="button"
+                  data-slide="next"
+                >
+                  <span
+                    class="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
-        
       </div>
     </div>
     <% } %>
@@ -86,13 +109,13 @@
 </div>
 
 <script>
-    $(document).ready(function(){
-  $('.carousel').each(function(){
-    $(this).find('.carousel-indicators li').eq(0).addClass('active');
-    $(this).find('.carousel-item').eq(0).addClass('active');
-    $(this).find('.carousel-item img').eq(0).addClass('active');
+  $(document).ready(function () {
+    $(".carousel").each(function () {
+      $(this).find(".carousel-indicators li").eq(0).addClass("active");
+      $(this).find(".carousel-item").eq(0).addClass("active");
+      $(this).find(".carousel-item img").eq(0).addClass("active");
+    });
   });
-});
 </script>
 
 <%- include("footer"); -%>

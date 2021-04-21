@@ -2,12 +2,12 @@
 <div class="container pred-head">
   <div class="row">
     <div class="col-sm-6">
-      <h5 class="mb-0 mt-3">Showing <%= images %> images</h5>
+      <h5 class="mb-0 mt-3">Showing <%= images %> image(s)</h5>
     </div>
     <div class="col-sm-6">
       <a href="/" style="float: right"
         ><button class="btn btn-lg btn-light" role="button">
-          Predict More
+          Predict Again
         </button></a
       >
     </div>
@@ -36,7 +36,11 @@
 
                   <hr />
                   <small>Prediction</small>
+                  <% if (real[i] != pred[i]) { %>
+                  <h3 class="capitalize" style="color: red"><%= pred[i] %></h3>
+                  <% } else { %>
                   <h3 class="capitalize"><%= pred[i] %></h3>
+                  <% } %>
                 </div>
                 <div class="col-md-5">
                   <div class="prob-container">
@@ -44,7 +48,7 @@
                     <h2 class="prob"><%= prob[i] %></h2>
                     <br />
                     <br />
-                    <% if(plots.length === 0) { %>
+                    <% if(plots[i].length) { %>
                     <button
                       class="btn btn-md btn-light"
                       data-toggle="collapse"
@@ -122,6 +126,8 @@
 </div>
 
 <script>
+  $(document).ready(function () {});
+
   $(document).ready(function () {
     $(".carousel").each(function () {
       $(this).find(".carousel-indicators li").eq(0).addClass("active");

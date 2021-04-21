@@ -8,7 +8,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
-const baseUrl = 'http://127.0.0.1:8000/api/';
+const baseUrl = 'http://127.0.0.1:8000';
 
 app.get("/", function (req, res) {
   const qSize = req.query.size;
@@ -18,7 +18,7 @@ app.get("/", function (req, res) {
     size = 0;
   }
 
-  url = baseUrl + "available-models/";
+  url = baseUrl + "/api/available-models/";
 
   http.get(url, function (response) {
     response.on("data", function (data) {
@@ -72,7 +72,7 @@ app.post("/", function (req, res) {
     layers = layers.join("");
   }
 
-  url = baseUrl + "dataset-size/";
+  url = baseUrl + "/api/dataset-size/";
 
   http.get(url, (response) => {
     response.on("data", function (data) {
@@ -94,7 +94,7 @@ app.get("/predictions/:images/:modelId/:layers?", function (req, res) {
   layers = req.params.layers;
   let layersLen = 0;
 
-  let url = baseUrl + "/predictions/" + modelId + "/" + images + "/";
+  let url = baseUrl + "/api/predictions/" + modelId + "/" + images + "/";
   
   if (layers) {
     url = url + layers + "/";

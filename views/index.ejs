@@ -8,10 +8,12 @@
       <p class="description">
         This tool allows you to obtain predictions from and visualise
         <a href="https://arxiv.org/abs/1809.00888">MesoNet</a>, a deepfake
-        detector Enter the number of images, select a particular MesoNet variant
+        detector.
+        <p class="description">
+        Enter the number of images, select a particular MesoNet variant
         to use, check any convolutional layers you want to visualise and hit
-        submit! Voila! The tool will randomly select images from a dataset, make
-        predictions, draw some plots and will show you the results!
+        'Predict'! Voila! The tool will randomly select images from a dataset, make
+        predictions, draw some plots and will show you the results! </p>
       </p>
     </div>
   </div>
@@ -29,7 +31,7 @@
               class="form-control"
               id="images"
               name="images"
-              placeholder="Number of images"
+              placeholder="Number of images (max <%= size %>)"
               required
             />
             <button type="submit" class="btn btn-md btn-light mt-5">

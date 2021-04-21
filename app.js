@@ -63,7 +63,13 @@ app.get("/", function (req, res) {
 app.post("/", function (req, res) {
   images = req.body.images;
   modelId = req.body.models;
-  layers = req.body.layers.join("");
+  let layers = req.body.layers;
+  if( typeof layers === 'undefined'){
+    layers = '';
+  } else if (layers.length > 1){
+    layers = layers.join('');
+  }
+
   url = "http://127.0.0.1:8000/api/dataset-size/";
 
   http.get(url, function (response) {
@@ -80,15 +86,19 @@ app.post("/", function (req, res) {
   });
 });
 
-app.get("/predictions/:images/:modelId/:layers", function (req, res) {
-  // req.socket.setTimeout(1000*60*10);
+app.get("/predictions/:images/:modelId/:layers?", function (req, res) {
   images = req.params.images;
   modelId = req.params.modelId;
   layers = req.params.layers;
-  layersLen = layers.length;
+  let layersLen = 0;
+  
   baseUrl = "http://127.0.0.1:8000";
-  url =
-    baseUrl + "/api/predictions/" + modelId + "/" + images + "/" + layers + "/";
+  let url =
+    baseUrl + "/api/predictions/" + modelId + "/" + images + "/"
+  if (layers) {
+   url = url + layers + "/";
+   layersLen = layers.length;
+  }
 
   http.get(url, function (response) {
     response.on("data", function(data) {

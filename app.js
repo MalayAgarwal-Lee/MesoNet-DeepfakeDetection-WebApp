@@ -8,10 +8,11 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
-const baseUrl = 'http://127.0.0.1:8000';
+const baseUrl = 'https://mesonetdetect.games';
 
 app.get("/", function (req, res) {
   const qSize = req.query.size;
+  const dataset = qSize;
   if (qSize) {
     size = qSize;
   } else {
@@ -20,7 +21,7 @@ app.get("/", function (req, res) {
 
   url = baseUrl + "/api/available-models/";
 
-  http.get(url, function (response) {
+  https.get(url, function (response) {
     response.on("data", function (data) {
       const models = JSON.parse(data);
       const modelLength = models.length;
@@ -46,6 +47,7 @@ app.get("/", function (req, res) {
       });
 
       res.render("index", {
+        dataset: dataset,
         size: size,
         modelLength: modelLength,
         layers: layers,
@@ -74,7 +76,7 @@ app.post("/", function (req, res) {
 
   url = baseUrl + "/api/dataset-size/";
 
-  http.get(url, (response) => {
+  https.get(url, (response) => {
     response.on("data", function (data) {
       const dataset = JSON.parse(data);
       const size = dataset.size;
@@ -101,7 +103,7 @@ app.get("/predictions/:images/:modelId/:layers?", function (req, res) {
     layersLen = layers.length;
   }
 
-  http.get(url, (response) => {
+  https.get(url, (response) => {
     response.on("data", function (data) {
       const predictions = JSON.parse(data);
       const probability = [],

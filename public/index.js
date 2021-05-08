@@ -97,10 +97,10 @@ $(document).ready(function () {
     $(".sidebar").not(id).hide();
     $(".br").not(id).hide();
     $("." + id).show();
-    $("#sidebar" + index).css("width", "27rem");
+    $("#sidebar" + index).addClass('change-width');
   });
 });
 
 function closeNav() {
-  $(".sidebar").css("width", "0");
+  $(".sidebar").removeClass('change-width');
 }

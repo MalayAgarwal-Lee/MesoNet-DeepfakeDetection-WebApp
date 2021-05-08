@@ -1,11 +1,20 @@
 <%- include("header"); -%>
+<div class="d-sm-block d-md-none">
+  <nav class="navbar fixed-bottom navbar-dark">
+    <ul class="navbar-nav mx-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Predict Again <span class="sr-only">(current)</span></a>
+      </li>
+      </ul>
+  </nav>
+  </div>
 <div class="container pred-head">
   <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-6 show-imgs">
       <h5 class="mb-0 mt-3">Showing <%= images %> image(s)</h5>
     </div>
     <div class="col-sm-6">
-      <a href="/" style="float: right"
+      <a href="/" class="predict-again"
         ><button class="btn btn-lg btn-light" role="button">
           Predict Again
         </button></a
@@ -18,18 +27,18 @@
   <div class="row">
     <% for(var i = 0; i < images; ++i){ %>
     <div class="col-md-6">
-      <div class="container">
+      <div class="container mb-5">
         <div class="card mt-5" style="width: auto">
           <div class="row">
-            <div class="col-sm-4">
+            <div class="col-md-4 img-col">
               <img
                 src="<%= baseUrl %><%= url[i] %>"
                 alt=""
                 class="predicted-img"
               />
             </div>
-            <div class="col-sm-8">
-              <div class="row">
+            <div class="col-md-8">
+              <div class="row result-heading">
                 <div class="col-md-7">
                   <small>Actual</small><br />
                   <h3 class="capitalize"><%= real[i] %></h3>
@@ -45,7 +54,7 @@
                 <div class="col-md-5">
                   <div class="prob-container">
                     <small>Probability</small>
-                    <h2 class="prob"><%= prob[i] %></h2>
+                    <h2 class="prob"><%= prob[i] %>%</h2>
                     <br />
                     <br />
                     <% if(plots[i].length) { %>

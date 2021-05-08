@@ -1,8 +1,7 @@
 <%- include("header"); -%>
-
 <div class="row">
   <div class="col-md-2">
-    <div class="container how-to">
+    <div class="container how-to d-none d-sm-none d-md-block">
       <h5>How-to</h5>
       <br />
       <p class="description">
@@ -34,10 +33,19 @@
               placeholder="Number of images (max <%= dataset %>)"
               required
             />
-            <button type="submit" class="btn btn-md btn-light mt-5">
+            <button type="submit" class="btn btn-md btn-light mt-5 d-none d-sm-none d-md-block">
               Predict
             </button>
           </div>
+          <div class="d-sm-block d-md-none">
+            <nav class="navbar fixed-bottom navbar-dark">
+              <ul class="navbar-nav mx-auto">
+                <li class="nav-item active">
+                  <button class="btn btn-default navbar-btn nav-link" style="border-style: none;" type="submit">Predict <span class="sr-only">(current)</span></button>
+                </li>
+                </ul>
+            </nav>
+            </div>
           <% if(size) { %>
           <small class="text-muted"
             >Limit exceeded. Please give a value within range <%= size %></small
@@ -72,6 +80,7 @@
   <div class="col-md-2 sidenav">
     <% for(var i = 0; i < modelLength; ++i) { %>
     <div id="sidebar" class="sidebar <%= 'model' + (i+1) %>">
+      <div class="container contain-sidebar">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
         >&times;</a
       >
@@ -80,11 +89,13 @@
       <p class="side-model-desc <%= 'model-desc' + (i+1) %>">Description:</p>
       <br />
       <p class="loss-label">Loss Curve:</p>
+      <div class="img-div mx-auto">
       <img
         class="side-model-img <%= 'model-img' + (i+1) %>"
         src=""
         alt="loss curve"
       />
+    </div>
       <br />
       <br />
       <p class="acc-head">Accuracy:</p>
@@ -104,7 +115,9 @@
         </table>
       </div>
     </div>
+    </div>
     <% } %>
+
   </div>
 </div>
 

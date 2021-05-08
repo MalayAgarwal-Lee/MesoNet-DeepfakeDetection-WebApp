@@ -10,9 +10,16 @@ app.use(express.static(__dirname + "/public"));
 
 const baseUrl = 'https://mesonetdetect.games';
 
+var dataset = 0;
+https.get(baseUrl + '/api/dataset-size/', (res) => {
+  res.on('data', (data) => {
+    const datasetJson = JSON.parse(data);
+    dataset = datasetJson.size;
+  })
+})
+
 app.get("/", function (req, res) {
   const qSize = req.query.size;
-  const dataset = qSize;
   if (qSize) {
     size = qSize;
   } else {
@@ -47,7 +54,6 @@ app.get("/", function (req, res) {
       });
 
       res.render("index", {
-        dataset: dataset,
         size: size,
         modelLength: modelLength,
         layers: layers,
@@ -59,6 +65,7 @@ app.get("/", function (req, res) {
         clr: clr,
         clrCols: clrCols,
         lossCurve: lossCurve,
+        dataset: dataset,
       });
     });
   });
